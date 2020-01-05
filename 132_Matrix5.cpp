@@ -1,0 +1,79 @@
+#include <sstream>
+#include <iomanip>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <cmath>
+#include <algorithm>
+#include <vector>
+#include <set>
+#include <map>
+#include <stack>
+#include <queue>
+#include <string>
+#include <deque>
+#include <complex>
+
+#define FOR(i,a,b) for(int i=(a),_b=(b); i<=_b; i++)
+#define FORD(i,a,b) for(int i=(a),_b=(b); i>=_b; i--)
+#define REP(i,a) for(int i=0,_a=(a); i<_a; i++)
+#define FORN(i,a,b) for(int i=(a),_b=(b);i<_b;i++)
+#define DOWN(i,a,b) for(int i=a,_b=(b);i>=_b;i--)
+#define SET(a,v) memset(a,v,sizeof(a))
+#define sqr(x) ((x)*(x))
+#define ll long long
+#define F first
+#define S second
+#define PB push_back
+#define MP make_pair
+
+#define DEBUG(x) cout << #x << " = "; cout << x << endl;
+#define PR(a,n) cout << #a << " = "; FOR(_,1,n) cout << a[_] << ' '; cout << endl;
+#define PR0(a,n) cout << #a << " = "; REP(_,n) cout << a[_] << ' '; cout << endl;
+using namespace std;
+typedef unsigned long long ull;
+ll matrix[105][105];
+ll n;
+void init(){
+	cin >> n;
+	for(ll i = 0; i < n; i++)
+		for(ll j = 0; j < n; j++)
+			cin >> matrix[i][j];
+}
+ll findMin(){
+	ll sumRow[105], sumCol[105];
+	memset(sumRow, 0, sizeof(sumRow));
+	memset(sumCol, 0, sizeof(sumCol));
+	for(ll i = 0; i < n; i++)
+		for(ll j = 0; j < n; j++){
+			sumRow[i] += matrix[i][j];
+			sumCol[j] += matrix[i][j];
+		}
+	ll maxSum = 0;
+	for(int i = 0; i < n; i++){
+			maxSum = max(maxSum, sumRow[i]);
+			maxSum = max(maxSum, sumCol[i]);
+	}
+	ll dem = 0;
+	for(int i = 0, j = 0; i < n && j < n;){
+		ll dif = min(maxSum - sumRow[i], maxSum - sumCol[j]);
+		matrix[i][j] += dif;
+		sumRow[i] += dif;
+		sumCol[j] += dif;
+		dem += dif;
+		if(sumRow[i] == maxSum) ++i;
+		if(sumCol[j] == maxSum) ++j;
+	}
+	return dem;
+}
+int main(){
+	int t;
+	cin >> t;
+	while(t--){
+		init();
+		cout << findMin() << endl;
+	}
+	return 0;
+}
+
